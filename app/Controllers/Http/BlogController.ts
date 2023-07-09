@@ -1,6 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 import Blog from 'App/Models/Blog';
-import User from 'App/Models/User';
 
 export default class BlogController {
 	public async list() {
@@ -9,12 +8,32 @@ export default class BlogController {
 		return blogs.reverse();
 	}
 
-	public async get({ params, auth }: HttpContextContract) {
-		if (auth.isLoggedIn) {
-			const userBlog = await Blog.query()
-				.where('id', params.id)
-				.where('created_by', auth.user.id);
+	public async get({ params }: HttpContextContract) {
+		try {
+			const userBlog = await Blog.findBy('id', params.id);
 			return userBlog;
+		} catch (error) {
+			return error;
+		}
+	}
+
+	public async store({ request, auth }: HttpContextContract) {
+		try {
+			const data = request.all();
+
+			if (auth.isLoggedIn) {
+				const user = await auth.authenticate();
+				const blog = new Blog();
+
+				blog.name = data.name;
+				blog.description = data.description;
+
+				await user.related('blog').save(blog);
+
+				return blog;
+			}
+		} catch (error) {
+			return error;
 		}
 	}
 }
