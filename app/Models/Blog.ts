@@ -29,6 +29,8 @@ export default class Blog extends BaseModel {
 	@hasMany(() => Post)
 	public posts: HasMany<typeof Post>;
 
+	@column()
+	public userId: number;
 	@belongsTo(() => User)
-	public createdBy: BelongsTo<typeof User>;
+	public user: BelongsTo<typeof User>;
 }

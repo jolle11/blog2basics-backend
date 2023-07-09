@@ -1,10 +1,14 @@
 import Blog from './Blog';
+import Comment from './Comment';
+import Post from './Post';
 import Hash from '@ioc:Adonis/Core/Hash';
 import {
 	BaseModel,
+	HasMany,
 	HasOne,
 	beforeSave,
 	column,
+	hasMany,
 	hasOne,
 } from '@ioc:Adonis/Lucid/Orm';
 import { DateTime } from 'luxon';
@@ -36,6 +40,10 @@ export default class User extends BaseModel {
 
 	@hasOne(() => Blog)
 	public blog: HasOne<typeof Blog>;
+	@hasMany(() => Post)
+	public post: HasMany<typeof Post>;
+	@hasMany(() => Comment)
+	public comment: HasMany<typeof Comment>;
 
 	@beforeSave()
 	public static async hashPassword(user: User) {

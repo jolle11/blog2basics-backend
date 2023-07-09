@@ -1,4 +1,4 @@
-import User from './User';
+import Post from './Post';
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm';
 import { DateTime } from 'luxon';
 
@@ -13,6 +13,8 @@ export default class Comment extends BaseModel {
 	@column.dateTime({ columnName: 'customDeletedAtColumn' })
 	public deletedAt?: DateTime | null;
 
-	@belongsTo(() => User)
-	public createdBy: BelongsTo<typeof User>;
+	@column()
+	public postId: number;
+	@belongsTo(() => Post)
+	public post: BelongsTo<typeof Post>;
 }

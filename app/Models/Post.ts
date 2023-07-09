@@ -1,5 +1,5 @@
+import Blog from './Blog';
 import Comment from './Comment';
-import User from './User';
 import {
 	BaseModel,
 	BelongsTo,
@@ -24,6 +24,8 @@ export default class Post extends BaseModel {
 	@hasMany(() => Comment)
 	public comments: HasMany<typeof Comment>;
 
-	@belongsTo(() => User)
-	public createdBy: BelongsTo<typeof User>;
+	@column()
+	public blogId: number;
+	@belongsTo(() => Blog)
+	public blog: BelongsTo<typeof Blog>;
 }
