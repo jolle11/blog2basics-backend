@@ -11,11 +11,6 @@ export default class extends BaseSchema {
 			table.string('description').nullable();
 
 			table.timestamp('created_at', { useTz: true });
-			table
-				.integer('created_by')
-				.unsigned()
-				.references('users.id')
-				.onDelete('CASCADE');
 			table.timestamp('updated_at', { useTz: true });
 			table.timestamp('deleted_at', { useTz: true }).nullable();
 		});
