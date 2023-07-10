@@ -7,9 +7,9 @@ export default class BlogController {
 		return blogs.reverse();
 	}
 
-	public async get({ params }: HttpContextContract) {
+	public async get({ params, response }: HttpContextContract) {
 		const blog = await Blog.findByOrFail('id', params.id);
-		return blog;
+		return response.ok(blog);
 	}
 
 	public async store({ request, response, auth }: HttpContextContract) {
@@ -20,31 +20,43 @@ export default class BlogController {
 		if (Object.keys(userHasBlog).length === 0 && user) {
 			const blog = new Blog();
 
-			blog.name = data.name;
-			blog.description = data.description;
+			blog.merge({ name: data.name, description: data.description });
 
 			await user.related('blog').save(blog);
 
-			return blog;
+			return response.created({ message: 'Blog created successfully' });
 		} else {
-			return response
-				.status(403)
-				.send({ status: '403 Forbidden', message: 'Only one blog per user' });
+			return response.nonAuthoritativeInformation({
+				message: 'Only one blog per user',
+			});
 		}
 	}
 
-	// public async edit({ params, request, response, auth }: HttpContextContract) {}
+	public async edit({ params, request, response, auth }: HttpContextContract) {
+		const user = await auth.authenticate();
+		const data = request.all();
+		const blog = Blog.findByOrFail('id', params.id);
+
+		if (blog && user.id === (await blog).userId) {
+			(await blog)
+				.merge({ name: data.name, description: data.description })
+				.save();
+			return response.ok({ message: 'Blog updated successfully' });
+		} else {
+			return response.unauthorized({
+				message: "You're not authorized to edit this blog",
+			});
+		}
+	}
 
 	public async delete({ params, auth, response }: HttpContextContract) {
 		const user = await auth.authenticate();
-		const blog = await Blog.findBy('id', params.id);
+		const blog = Blog.findByOrFail('id', params.id);
 
-		if (user && blog) {
-			await blog.delete();
+		if (blog && user.id === (await blog).userId) {
+			(await blog).delete();
 
-			return response
-				.status(200)
-				.send({ status: '200 OK', message: 'Blog deleted' });
+			return response.ok({ message: 'Blog deleted successfully' });
 		}
 	}
 }

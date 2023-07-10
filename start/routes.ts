@@ -8,7 +8,7 @@ Route.group(() => {
 		Route.get('/', 'BlogController.list');
 		Route.get('/:id', 'BlogController.get');
 		Route.post('/new', 'BlogController.store');
-		Route.patch('/update', 'BlogController.edit');
+		Route.patch('/:id', 'BlogController.edit');
 		Route.delete('/:id', 'BlogController.delete');
 	})
 		.prefix('blogs')
