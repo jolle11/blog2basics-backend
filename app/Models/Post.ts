@@ -1,5 +1,7 @@
 import Blog from './Blog';
 import Comment from './Comment';
+import { SoftDeletes } from '@ioc:Adonis/Addons/LucidSoftDeletes';
+import { compose } from '@ioc:Adonis/Core/Helpers';
 import {
 	BaseModel,
 	BelongsTo,
@@ -10,7 +12,7 @@ import {
 } from '@ioc:Adonis/Lucid/Orm';
 import { DateTime } from 'luxon';
 
-export default class Post extends BaseModel {
+export default class Post extends compose(BaseModel, SoftDeletes) {
 	@column({ isPrimary: true })
 	public id: number;
 
@@ -18,8 +20,8 @@ export default class Post extends BaseModel {
 	public createdAt: DateTime;
 	@column.dateTime({ autoCreate: true, autoUpdate: true })
 	public updatedAt: DateTime;
-	@column.dateTime({ columnName: 'customDeletedAtColumn' })
-	public deletedAt?: DateTime | null;
+	@column.dateTime({ columnName: 'deleted_at' })
+	public deletedAt: DateTime | null;
 
 	@hasMany(() => Comment)
 	public comments: HasMany<typeof Comment>;
