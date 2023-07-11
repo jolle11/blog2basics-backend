@@ -7,6 +7,8 @@ export default class extends BaseSchema {
 		this.schema.createTable(this.tableName, (table) => {
 			table.increments('id');
 
+			table.text('body');
+
 			table.timestamp('created_at', { useTz: true });
 			table.timestamp('updated_at', { useTz: true });
 			table.timestamp('deleted_at', { useTz: true }).nullable();

@@ -9,7 +9,12 @@ export default class extends BaseSchema {
 				.integer('post_id')
 				.unsigned()
 				.references('posts.id')
-				.onDelete('CASCADE'); // delete post when user is deleted
+				.onDelete('CASCADE');
+			table
+				.integer('user_id')
+				.unsigned()
+				.references('users.id')
+				.onDelete('CASCADE');
 		});
 	}
 

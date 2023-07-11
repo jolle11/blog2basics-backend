@@ -8,7 +8,7 @@ export default class extends BaseSchema {
 			table.increments('id');
 
 			table.string('title');
-			table.string('body');
+			table.text('body');
 
 			table.timestamp('created_at', { useTz: true });
 			table.timestamp('updated_at', { useTz: true });
