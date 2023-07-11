@@ -16,6 +16,11 @@ export default class Post extends compose(BaseModel, SoftDeletes) {
 	@column({ isPrimary: true })
 	public id: number;
 
+	@column()
+	public title: string;
+	@column()
+	public body: string;
+
 	@column.dateTime({ autoCreate: true })
 	public createdAt: DateTime;
 	@column.dateTime({ autoCreate: true, autoUpdate: true })
