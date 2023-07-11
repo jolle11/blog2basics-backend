@@ -1,10 +1,11 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
+import Database from '@ioc:Adonis/Lucid/Database';
 import Blog from 'App/Models/Blog';
 
 export default class BlogController {
 	public async list() {
-		const blogs = await Blog.all();
-		return blogs.reverse();
+		const blogs = await Database.from('blogs').paginate(1, 5);
+		return blogs;
 	}
 
 	public async get({ params, response }: HttpContextContract) {
@@ -35,12 +36,10 @@ export default class BlogController {
 	public async edit({ params, request, response, auth }: HttpContextContract) {
 		const user = await auth.authenticate();
 		const data = request.all();
-		const blog = Blog.findByOrFail('id', params.id);
+		const blog = await Blog.findByOrFail('id', params.id);
 
-		if (blog && user.id === (await blog).userId) {
-			(await blog)
-				.merge({ name: data.name, description: data.description })
-				.save();
+		if (blog && user.id === blog.userId) {
+			blog.merge({ name: data.name, description: data.description }).save();
 			return response.ok({ message: 'Blog updated successfully' });
 		} else {
 			return response.unauthorized({
@@ -51,12 +50,16 @@ export default class BlogController {
 
 	public async delete({ params, auth, response }: HttpContextContract) {
 		const user = await auth.authenticate();
-		const blog = Blog.findByOrFail('id', params.id);
+		const blog = await Blog.findByOrFail('id', params.id);
 
-		if (blog && user.id === (await blog).userId) {
-			(await blog).delete();
+		if (blog && user.id === blog.userId) {
+			blog.delete();
 
 			return response.ok({ message: 'Blog deleted successfully' });
+		} else {
+			return response.unauthorized({
+				message: 'You are not allowed to delete this blog',
+			});
 		}
 	}
 }
