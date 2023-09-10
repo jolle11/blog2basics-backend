@@ -1,6 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 import Database from '@ioc:Adonis/Lucid/Database';
 import Blog from 'App/Models/Blog';
+import BlogValidator from 'App/Validators/BlogValidator';
 
 export default class BlogController {
 	public async list() {
@@ -14,8 +15,8 @@ export default class BlogController {
 	}
 
 	public async store({ request, response, auth }: HttpContextContract) {
+		const data = await request.validate(BlogValidator);
 		const user = await auth.authenticate();
-		const data = request.all();
 		const userHasBlog = Blog.findBy('user_id', auth.user?.id);
 
 		if (Object.keys(userHasBlog).length === 0 && user) {
