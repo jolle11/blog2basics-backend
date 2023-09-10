@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon';
 import Post from './Post';
 import User from './User';
 import { SoftDeletes } from '@ioc:Adonis/Addons/LucidSoftDeletes';
@@ -10,7 +11,6 @@ import {
 	column,
 	hasMany,
 } from '@ioc:Adonis/Lucid/Orm';
-import { DateTime } from 'luxon';
 
 export default class Blog extends compose(BaseModel, SoftDeletes) {
 	@column({ isPrimary: true })
