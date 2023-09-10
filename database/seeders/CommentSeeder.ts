@@ -1,8 +1,8 @@
-import PostFactory from 'Database/factories/PostFactory';
+import CommentFactory from 'Database/factories/CommentFactory';
 import BaseSeeder from '@ioc:Adonis/Lucid/Seeder';
 
 export default class extends BaseSeeder {
 	public async run() {
-		await PostFactory.createMany(30);
+		await CommentFactory.createMany(40);
 	}
 }
