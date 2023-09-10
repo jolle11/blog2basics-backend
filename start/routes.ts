@@ -7,21 +7,31 @@ Route.group(() => {
 	// ======================== BLOGS ======================= //
 	Route.group(() => {
 		Route.get('/', 'BlogController.list');
-		Route.get('/:id', 'BlogController.get');
+		Route.get('/:blogId', 'BlogController.get');
 		Route.group(() => {
 			Route.post('/new', 'BlogController.store');
-			Route.patch('/:id', 'BlogController.edit');
-			Route.delete('/:id', 'BlogController.delete');
+			Route.patch('/:blogId', 'BlogController.edit');
+			Route.delete('/:blogId', 'BlogController.delete');
+			// ======================== POSTS ======================= //
+			Route.group(() => {
+				Route.get('/', 'PostController.list');
+				Route.get('/:postId', 'PostController.get');
+				Route.group(() => {
+					Route.post('/new', 'PostController.store');
+					Route.patch('/:postId', 'PostController.edit');
+					Route.delete('/:postId', 'PostController.delete');
+					// ====================== COMMENTS ====================== //
+					Route.group(() => {
+						Route.get('/', 'CommentController.list');
+						Route.get('/:commentId', 'CommentController.get');
+						Route.group(() => {
+							Route.post('/new', 'CommentController.store');
+							Route.patch('/:commentId', 'CommentController.edit');
+							Route.delete('/:commentId', 'CommentController.delete');
+						}); // .middleware('auth:api');
+					}).prefix(':postId/comments');
+				});
+			}).prefix(':blogId/posts');
 		}).middleware('auth:api');
 	}).prefix('blogs');
-	// ======================== POSTS ======================= //
-	Route.group(() => {
-		Route.get('/', 'PostController.list');
-		Route.get('/:id', 'PostController.get');
-		Route.group(() => {
-			Route.post('/new', 'PostController.store');
-			Route.patch('/:id', 'PostController.edit');
-			Route.delete('/:id', 'PostController.delete');
-		}).middleware('auth:api');
-	}).prefix('posts');
 }).prefix('api');
