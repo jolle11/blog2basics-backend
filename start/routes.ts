@@ -2,11 +2,13 @@ import Route from '@ioc:Adonis/Core/Route';
 
 Route.group(() => {
 	// ======================== AUTH ======================== //
+	Route.post('user', 'AuthController.get');
 	Route.post('register', 'AuthController.register');
 	Route.post('login', 'AuthController.login');
 	// ======================== BLOGS ======================= //
 	Route.group(() => {
 		Route.get('/', 'BlogController.list');
+		Route.get('/posts', 'PostController.list');
 		Route.get('/:blogId', 'BlogController.get');
 		Route.group(() => {
 			Route.post('/new', 'BlogController.store');
