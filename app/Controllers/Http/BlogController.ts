@@ -1,7 +1,7 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
-import Database from '@ioc:Adonis/Lucid/Database';
 import Blog from 'App/Models/Blog';
 import BlogValidator from 'App/Validators/BlogValidator';
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
+import Database from '@ioc:Adonis/Lucid/Database';
 
 export default class BlogController {
 	public async list() {
@@ -10,7 +10,7 @@ export default class BlogController {
 	}
 
 	public async get({ params, response }: HttpContextContract) {
-		const blog = await Blog.findByOrFail('id', params.id);
+		const blog = await Blog.findByOrFail('id', params.blogId);
 		return response.ok(blog);
 	}
 
@@ -37,7 +37,7 @@ export default class BlogController {
 	public async edit({ params, request, response, auth }: HttpContextContract) {
 		const user = await auth.authenticate();
 		const data = request.all();
-		const blog = await Blog.findByOrFail('id', params.id);
+		const blog = await Blog.findByOrFail('id', params.blogId);
 
 		if (blog && user.id === blog.userId) {
 			blog.merge({ name: data.name, description: data.description }).save();
@@ -51,7 +51,7 @@ export default class BlogController {
 
 	public async delete({ params, auth, response }: HttpContextContract) {
 		const user = await auth.authenticate();
-		const blog = await Blog.findByOrFail('id', params.id);
+		const blog = await Blog.findByOrFail('id', params.blogId);
 
 		if (blog && user.id === blog.userId) {
 			blog.delete();
