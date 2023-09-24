@@ -1,12 +1,16 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
-import Database from '@ioc:Adonis/Lucid/Database';
 import Blog from 'App/Models/Blog';
 import Post from 'App/Models/Post';
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
+import Database from '@ioc:Adonis/Lucid/Database';
 
 export default class PostController {
-	public async list() {
-		const posts = await Database.from('posts').paginate(1, 10);
-		return posts;
+	public async list({ params }) {
+		if (params.blogId) {
+			return await Database.from('posts')
+				.where('blog_id', params.blogId)
+				.paginate(1, 10);
+		}
+		return await Database.from('posts').paginate(1, 10);
 	}
 
 	public async get({ params, response }: HttpContextContract) {
