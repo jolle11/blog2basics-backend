@@ -1,5 +1,6 @@
 import Blog from 'App/Models/Blog';
 import User from 'App/Models/User';
+import UserValidator from 'App/Validators/UserValidator';
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 export default class AuthController {
 	public async get({ request }) {
@@ -33,11 +34,13 @@ export default class AuthController {
 	}
 
 	public async register({ request, auth }: HttpContextContract) {
-		const email = request.input('email');
-		const password = request.input('password');
-		const name = request.input('name');
-		const surname = request.input('surname');
-		const alias = request.input('alias');
+		const validatedUser = await request.validate(UserValidator);
+
+		const email = validatedUser.email;
+		const password = validatedUser.password;
+		const name = validatedUser.name;
+		const surname = validatedUser.surname;
+		const alias = validatedUser.alias;
 
 		const user = new User();
 
