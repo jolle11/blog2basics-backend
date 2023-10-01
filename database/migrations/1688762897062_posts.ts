@@ -8,6 +8,7 @@ export default class extends BaseSchema {
 			table.increments('id');
 
 			table.string('title').notNullable();
+			table.string('slug').nullable();
 			table.text('body').notNullable();
 
 			table.timestamp('created_at', { useTz: true });

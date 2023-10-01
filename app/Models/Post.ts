@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon';
 import Blog from './Blog';
 import Comment from './Comment';
+import { slugify } from '@ioc:Adonis/Addons/LucidSlugify';
 import { SoftDeletes } from '@ioc:Adonis/Addons/LucidSoftDeletes';
 import { compose } from '@ioc:Adonis/Core/Helpers';
 import {
@@ -18,6 +19,15 @@ export default class Post extends compose(BaseModel, SoftDeletes) {
 
 	@column()
 	public title: string;
+
+	@column()
+	@slugify({
+		strategy: 'dbIncrement',
+		fields: ['title'],
+		allowUpdates: true,
+	})
+	public slug: string;
+
 	@column()
 	public body: string;
 

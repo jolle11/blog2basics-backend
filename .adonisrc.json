@@ -25,7 +25,8 @@
 		"@adonisjs/lucid",
 		"@adonisjs/auth",
 		"@adonisjs/bouncer",
-		"adonis-lucid-soft-deletes"
+		"adonis-lucid-soft-deletes",
+		"@adonisjs/lucid-slugify"
 	],
 	"aceProviders": [
 		"@adonisjs/repl"
