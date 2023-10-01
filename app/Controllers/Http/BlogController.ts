@@ -26,7 +26,10 @@ export default class BlogController {
 
 			await user.related('blog').save(blog);
 
-			return response.created({ message: 'Blog created successfully' });
+			return response.created({
+				blog: blog,
+				message: 'Blog created successfully',
+			});
 		} else {
 			return response.nonAuthoritativeInformation({
 				message: 'Only one blog per user',
