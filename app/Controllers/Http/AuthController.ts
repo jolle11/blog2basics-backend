@@ -4,10 +4,21 @@ import UserValidator from 'App/Validators/UserValidator';
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 export default class AuthController {
 	public async get({ request }) {
-		const user = await User.findBy('remember_me_token', request.body().token);
+		const rememberMeToken = request.body().token;
+		const user = await User.findBy('remember_me_token', rememberMeToken);
 		const blog = await Blog.findBy('user_id', user?.id);
 
-		return { user, blog };
+		return {
+			user: {
+				id: user.id,
+				name: user.name,
+				surname: user.surname,
+				email: user.email,
+				alias: user.alias,
+				remember_me_token: rememberMeToken,
+			},
+			blog,
+		};
 	}
 
 	public async login({ request, response, auth }: HttpContextContract) {
