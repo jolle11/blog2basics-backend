@@ -7,17 +7,15 @@ Route.group(() => {
 	Route.post('login', 'AuthController.login');
 	// ======================== BLOGS ======================= //
 	Route.group(() => {
-		Route.get('/', 'BlogController.list');
-		Route.get('/posts', 'PostController.list');
-		Route.get('/:blogId', 'BlogController.get');
+		// ======================= PRIVATE ====================== //
 		Route.group(() => {
 			Route.post('/new', 'BlogController.store');
 			Route.patch('/:blogId', 'BlogController.edit');
 			Route.delete('/:blogId', 'BlogController.delete');
 			// ======================== POSTS ======================= //
 			Route.group(() => {
-				Route.get('/', 'PostController.list');
-				Route.get('/:postId', 'PostController.get');
+				// Route.get('/', 'PostController.list');
+				// Route.get('/:postId', 'PostController.get');
 				Route.group(() => {
 					Route.post('/new', 'PostController.store');
 					Route.patch('/:postId', 'PostController.edit');
@@ -35,5 +33,10 @@ Route.group(() => {
 				});
 			}).prefix(':blogId/posts');
 		}).middleware('auth:api');
+		// ======================= PUBLIC ======================= //
+		Route.get('/', 'BlogController.list');
+		Route.get('/posts', 'PostController.list');
+		Route.get('/:blogId', 'BlogController.get');
+		Route.get('/:blogId/posts/:postId', 'PostController.get');
 	}).prefix('blogs');
 }).prefix('api');

@@ -14,7 +14,7 @@ export default class PostController {
 	}
 
 	public async get({ params, response }: HttpContextContract) {
-		const post = await Post.findByOrFail('id', params.id);
+		const post = await Post.findBy('id', params.postId);
 		return response.ok(post);
 	}
 
@@ -26,8 +26,9 @@ export default class PostController {
 			const post = new Post();
 			//
 			return response.ok({ message: 'Post created successfully' });
-		} else {
 		}
+		// else {
+		// }
 	}
 
 	public async edit({ params, request, response, auth }: HttpContextContract) {
